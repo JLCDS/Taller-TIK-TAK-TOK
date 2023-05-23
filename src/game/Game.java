@@ -1,294 +1,256 @@
 package game;
 
 
-	import java.io.BufferedWriter;
-	import java.io.FileWriter;
-	import java.io.IOException;
-	import java.time.LocalDateTime;
-	import java.time.format.DateTimeFormatter;
-	import java.util.Random;
-	import java.util.Scanner;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Random;
+import java.util.Scanner;
 
-	public class Game {
-	    private static final char EMPTY = '-';
-	    private static final char PLAYER_SYMBOL = 'X';
-	    private static final char COMPUTER_SYMBOL = 'O';
-	    private static final int BOARD_SIZE = 3;
-	    private static final int WINNING_CONDITION = 3;
+public class Game {
+    private static final char EMPTY = '-';
+    private static final char PLAYER_SYMBOL = 'X';
+    private static final char COMPUTER_SYMBOL = 'O';
+    private static final int BOARD_SIZE = 3;
+    private static final int WINNING_CONDITION = 3;
 
-	    private char[][] board;
-	    private Random random;
-	    private Scanner scanner;
-	    private String playerName;
-	    private String result;
-	    private LocalDateTime endTime;
+    private char[][] board;
+    private Random random;
+    private Scanner scanner;
+    private String playerName;
+    private String result;
+    private LocalDateTime endTime;
 
-	    public Game() {
-	        board = new char[BOARD_SIZE][BOARD_SIZE];
-	        random = new Random();
-	        scanner = new Scanner(System.in);
-	    }
+    public Game() {
+        board = new char[BOARD_SIZE][BOARD_SIZE];
+        random = new Random();
+        scanner = new Scanner(System.in);
+    }
 
-	    public void play() {
-	        initializeBoard();
-	        playerName = getPlayerName();
-	        displayInstructions();
+    public void play() {
+        initializeBoard();
+        playerName = getPlayerName();
+        displayInstructions();
 
-	        while (true) {
-	            playerMove();
-	            if (checkGameEnd(PLAYER_SYMBOL)) {
-	                result = "Gano";
-	                break;
-	            }
+        while (true) {
+            playerMove();
+            if (hasWinningCombination(PLAYER_SYMBOL)) {
+                result = "Gano";
+                break;
+            }
 
-	            computerMove();
-	            if (checkGameEnd(COMPUTER_SYMBOL)) {
-	                result = "Perdio";
-	                break;
-	            }
+            if (isBoardFull()) {
+                result = "Empate";
+                break;
+            }
 
-	            if (isBoardFull()) {
-	                result = "Empato";
-	                break;
-	            }
-	        }
+            computerMove();
+            if (hasWinningCombination(COMPUTER_SYMBOL)) {
+                result = "Perdio";
+                break;
+            }
 
-	        endTime = LocalDateTime.now();
-	        displayResult();
-	        saveGameResult();
-	    }
+            if (isBoardFull()) {
+                result = "Empate";
+                break;
+            }
+        }
 
-	    private void initializeBoard() {
-	        for (int i = 0; i < BOARD_SIZE; i++) {
-	            for (int j = 0; j < BOARD_SIZE; j++) {
-	                board[i][j] = EMPTY;
-	            }
-	        }
-	    }
+        endTime = LocalDateTime.now();
+        displayResult();
+        saveGameResult();
+    }
 
-	    private String getPlayerName() {
-	        System.out.print("Ingresa tu nombre: ");
-	        return scanner.nextLine();
-	    }
+    private void initializeBoard() {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                board[i][j] = EMPTY;
+            }
+        }
+    }
 
-	    private void displayInstructions() {
-	        System.out.println("Instrucciones:");
-	        System.out.println("Ingresa las coordenadas (fila y columna) para realizar tu movimiento.");
-	        System.out.println("El tablero tiene las siguientes coordenadas:");
-	        System.out.println(" 0 1 2");
-	        System.out.println("0 | | ");
-	        System.out.println("1 | | ");
-	        System.out.println("2 | | ");
-	        System.out.println("¡Buena suerte!");
-	        System.out.println();
-	    }
+    private String getPlayerName() {
+        System.out.print("Ingresa tu nombre: ");
+        return scanner.nextLine();
+    }
 
-	    private void playerMove() {
-	        while (true) {
-	            System.out.println(playerName + ", es tu turno (X).");
-	            System.out.print("Ingresa la fila: ");
-	            int row = scanner.nextInt();
-	            System.out.print("Ingresa la columna: ");
-	            int col = scanner.nextInt();
+    private void displayInstructions() {
+        System.out.println("Instrucciones:");
+        System.out.println("Ingresa las coordenadas (fila y columna) para realizar tu movimiento.");
+        System.out.println("El tablero tiene las siguientes coordenadas:");
+        System.out.println(" 0 1 2");
+        System.out.println("0 | | ");
+        System.out.println("1 | | ");
+        System.out.println("2 | | ");
+        System.out.println("¡Buena suerte!");
+        System.out.println();
+    }
 
-	            if (isValidMove(row, col)) {
-	                board[row][col] = PLAYER_SYMBOL;
-	                break;
-	            } else {
-	                System.out.println("Movimiento inválido. Inténtalo de nuevo.");
-	            }
-	        }
+    private void playerMove() {
+        while (true) {
+            System.out.println(playerName + ", es tu turno (X).");
+            System.out.print("Ingresa la fila: ");
+            int row = scanner.nextInt();
+            System.out.print("Ingresa la columna: ");
+            int col = scanner.nextInt();
 
-	        System.out.println();
-	        displayBoard();
-	        System.out.println();
-	    }
+            if (isValidMove(row, col)) {
+                board[row][col] = PLAYER_SYMBOL;
+                break;
+            } else {
+                System.out.println("Movimiento inválido. Inténtalo de nuevo.");
+            }
+        }
 
-	    private boolean isValidMove(int row, int col) {
-	        if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
-	            return false;
-	        }
+        System.out.println();
+        displayBoard();
+        System.out.println();
+    }
 
-	        return board[row][col] == EMPTY;
-	    }
+    private boolean isValidMove(int row, int col) {
+        if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
+            return false;
+        }
 
-	    private void computerMove() {
-	        System.out.println("Turno de la máquina (O).");
-	        int row;
-	        int col;
+        return board[row][col] == EMPTY;
+    }
 
-	       
-	        for (int i = 0; i < BOARD_SIZE; i++) {
-	            for (int j = 0; j < BOARD_SIZE; j++) {
-	                if (board[i][j] == EMPTY && canWin(i, j, COMPUTER_SYMBOL)) {
-	                    board[i][j] = COMPUTER_SYMBOL;
-	                    displayBoard();
-	                    System.out.println();
-	                    return;
-	                }
-	            }
-	        }
+    private void computerMove() {
+    	
+    	    System.out.println("Turno de la computadora (O).");
 
-	       
-	        for (int i = 0; i < BOARD_SIZE; i++) {
-	            for (int j = 0; j < BOARD_SIZE; j++) {
-	                if (board[i][j] == EMPTY && canWin(i, j, PLAYER_SYMBOL)) {
-	                    board[i][j] = COMPUTER_SYMBOL;
-	                    displayBoard();
-	                    System.out.println();
-	                    return;
-	                }
-	            }
-	        }
+    	    // Verificar si la computadora puede ganar en el siguiente movimiento
+    	    for (int i = 0; i < BOARD_SIZE; i++) {
+    	        for (int j = 0; j < BOARD_SIZE; j++) {
+    	            if (board[i][j] == EMPTY) {
+    	                board[i][j] = COMPUTER_SYMBOL;
+    	                if (hasWinningCombination(COMPUTER_SYMBOL)) {
+    	                    System.out.println();
+    	                    displayBoard();
+    	                    System.out.println();
+    	                    return;
+    	                }
+    	                board[i][j] = EMPTY;
+    	            }
+    	        }
+    	    }
 
-	        do {
-	            row = random.nextInt(BOARD_SIZE);
-	            col = random.nextInt(BOARD_SIZE);
-	        } while (!isValidMove(row, col));
+    	    // Verificar si el jugador puede ganar en el siguiente movimiento y bloquearlo
+    	    for (int i = 0; i < BOARD_SIZE; i++) {
+    	        for (int j = 0; j < BOARD_SIZE; j++) {
+    	            if (board[i][j] == EMPTY) {
+    	                board[i][j] = PLAYER_SYMBOL;
+    	                if (hasWinningCombination(PLAYER_SYMBOL)) {
+    	                    board[i][j] = COMPUTER_SYMBOL;
+    	                    System.out.println();
+    	                    displayBoard();
+    	                    System.out.println();
+    	                    return;
+    	                }
+    	                board[i][j] = EMPTY;
+    	            }
+    	        }
+    	    }
 
-	        board[row][col] = COMPUTER_SYMBOL;
-	        displayBoard();
-	        System.out.println();
-	    }
+    	    // Si no se cumplen las condiciones anteriores, realizar un movimiento aleatorio
+    	    while (true) {
+    	        int row = random.nextInt(BOARD_SIZE);
+    	        int col = random.nextInt(BOARD_SIZE);
 
-	    private boolean canWin(int row, int col, char symbol) {
-	       
-	        int count = 0;
-	        for (int j = 0; j < BOARD_SIZE; j++) {
-	            if (board[row][j] == symbol) {
-	                count++;
-	            }
-	        }
-	        if (count == WINNING_CONDITION - 1) {
-	            return true;
-	        }
+    	        if (isValidMove(row, col)) {
+    	            board[row][col] = COMPUTER_SYMBOL;
+    	            break;
+    	        }
+    	    }
 
-	        
-	        count = 0;
-	        for (int i = 0; i < BOARD_SIZE; i++) {
-	            if (board[i][col] == symbol) {
-	                count++;
-	            }
-	        }
-	        if (count == WINNING_CONDITION - 1) {
-	            return true;
-	        }
+    	    System.out.println();
+    	    displayBoard();
+    	    System.out.println();
+    	}
 
-	        
-	        if (row == col) {
-	            count = 0;
-	            for (int i = 0; i < BOARD_SIZE; i++) {
-	                if (board[i][i] == symbol) {
-	                    count++;
-	                }
-	            }
-	            if (count == WINNING_CONDITION - 1) {
-	                return true;
-	            }
-	        }
 
-	        
-	        if (row + col == BOARD_SIZE - 1) {
-	            count = 0;
-	            for (int i = 0; i < BOARD_SIZE; i++) {
-	                if (board[i][BOARD_SIZE - 1 - i] == symbol) {
-	                    count++;
-	                }
-	            }
-	            if (count == WINNING_CONDITION - 1) {
-	                return true;
-	            }
-	        }
+    private boolean hasWinningCombination(char symbol) {
+        // Verificar filas y columnas
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            int rowCount = 0;
+            int colCount = 0;
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (board[i][j] == symbol) {
+                    rowCount++;
+                }
+                if (board[j][i] == symbol) {
+                    colCount++;
+                }
+            }
+            if (rowCount == WINNING_CONDITION || colCount == WINNING_CONDITION) {
+                return true;
+            }
+        }
 
-	        return false;
-	    }
+        // Verificar diagonales
+        int diagCount = 0;
+        int antiDiagCount = 0;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            if (board[i][i] == symbol) {
+                diagCount++;
+            }
+            if (board[i][BOARD_SIZE - 1 - i] == symbol) {
+                antiDiagCount++;
+            }
+        }
 
-	    private boolean checkGameEnd(char symbol) {
-	        
-	        for (int i = 0; i < BOARD_SIZE; i++) {
-	            int rowCount = 0;
-	            int colCount = 0;
-	            for (int j = 0; j < BOARD_SIZE; j++) {
-	                if (board[i][j] == symbol) {
-	                    rowCount++;
-	                }
-	                if (board[j][i] == symbol) {
-	                    colCount++;
-	                }
-	            }
-	            if (rowCount == WINNING_CONDITION || colCount == WINNING_CONDITION) {
-	                return true;
-	            }
-	        }
+        if (diagCount == WINNING_CONDITION || antiDiagCount == WINNING_CONDITION) {
+            return true;
+        }
 
-	      
-	        int diagCount = 0;
-	        int antiDiagCount = 0;
-	        for (int i = 0; i < BOARD_SIZE; i++) {
-	            if (board[i][i] == symbol) {
-	                diagCount++;
-	            }
-	            if (board[i][BOARD_SIZE - 1 - i] == symbol) {
-	                antiDiagCount++;
-	            }
-	        }
-	          if (diagCount == WINNING_CONDITION || antiDiagCount == WINNING_CONDITION) {
-	            return true;
-	        }
+        return false;
+    }
 
-	        return false;
-	    }
+    private boolean isBoardFull() {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (board[i][j] == EMPTY) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
-	    private boolean isBoardFull() {
-	        for (int i = 0; i < BOARD_SIZE; i++) {
-	            for (int j = 0; j < BOARD_SIZE; j++) {
-	                if (board[i][j] == EMPTY) {
-	                    return false;
-	                }
-	            }
-	        }
-	        return true;
-	    }
+    private void displayBoard() {
+        System.out.println("Tablero actual:");
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
 
-	    private void displayBoard() {
-	        for (int i = 0; i < BOARD_SIZE; i++) {
-	            for (int j = 0; j < BOARD_SIZE; j++) {
-	                System.out.print(board[i][j] + " ");
-	            }
-	            System.out.println();
-	        }
-	    }
+    private void displayResult() {
+        System.out.println("Resultado: " + result);
+        System.out.println("Tiempo de finalización: " + endTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+    }
 
-	    private void displayResult() {
-	        System.out.println();
-	        if (result.equals("Gano")) {
-	            System.out.println("¡Felicidades, " + playerName + "! Ganaste.");
-	        } else if (result.equals("Perdio")) {
-	            System.out.println("Lo siento, " + playerName + ". Perdiste.");
-	        } else {
-	            System.out.println("¡Es un empate!");
-	        }
-	    }
+    private void saveGameResult() {
+    	String fileName = "src/resources/history_game.txt";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
+            writer.write("Jugador: " + playerName + ", Resultado: " + result + ", Tiempo de finalización: "
+                    + endTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            writer.newLine();
+        } catch (IOException e) {
+            System.out.println("Error al guardar el resultado del juego.");
+        }
+    }
 
-	    private void saveGameResult() {
-	        String fileName = "src/resources/history_game.txt";
-	        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
-	            String dateTime = endTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-	            String line = playerName + ";" + result + ";" + PLAYER_SYMBOL + ";" + dateTime;
-	            writer.write(line);
-	            writer.newLine();
-	            writer.flush();
-	            System.out.println("Resultado de la partida guardado en " + fileName);
-	        } catch (IOException e) {
-	            System.out.println("Error al guardar el resultado de la partida.");
-	        }
-	    }
+    public static void main(String[] args) {
+        Game game = new Game();
+        game.play();
+    }
+}
 
-	    public static void main(String[] args) {
-	        Game game = new Game();
-	        game.play();
-	    }
-	}
 
 
 
