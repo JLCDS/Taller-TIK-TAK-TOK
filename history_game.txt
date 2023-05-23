@@ -33,3 +33,6 @@ Jugador: luis;  Resultado: Empate; Simbolo: O; Tiempo de finalización: 2023-05-2
 Jugador: carlos;  Resultado: Perdió; Simbolo: O; Tiempo de finalización: 2023-05-23T06:51:27.5154136
 Jugador: carlos;  Resultado: Perdió; Simbolo: O; Tiempo de finalización: 2023-05-23T06:51:27.5154136
 Jugador: silvia;  Resultado: Ganó; Simbolo: O; Tiempo de finalización: 2023-05-23T06:52:10.3633731
+Jugador: jlc;  Resultado: Empate; Simbolo: O; Tiempo de finalizaciÃ³n: 2023-05-23T08:19:29.6016183
+Jugador: jlv;  Resultado: PerdiÃ³; Simbolo: X; Tiempo de finalizaciÃ³n: 2023-05-23T08:20:25.8286102
+Jugador: jlv;  Resultado: PerdiÃ³; Simbolo: X; Tiempo de finalizaciÃ³n: 2023-05-23T08:20:25.8296444

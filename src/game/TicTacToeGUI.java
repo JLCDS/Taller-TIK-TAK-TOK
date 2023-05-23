@@ -92,12 +92,12 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         studentInfoPanel.setLayout(new BoxLayout(studentInfoPanel, BoxLayout.Y_AXIS));
 
         JLabel student1Label = new JLabel("Integrante 1:");
-        JLabel student1NameLabel = new JLabel("Nombres: Juan");
-        JLabel student1LastNameLabel = new JLabel("Apellidos: ");
-        JLabel student1CodeLabel = new JLabel("Código: ");
+        JLabel student1NameLabel = new JLabel("Nombres: Juan David");
+        JLabel student1LastNameLabel = new JLabel("Apellidos: Lopez Castro");
+        JLabel student1CodeLabel = new JLabel("Código: 202023451 ");
 
         JLabel student2Label = new JLabel("Integrante 2:");
-        JLabel student2NameLabel = new JLabel("Nombres: Silvia juliana ");
+        JLabel student2NameLabel = new JLabel("Nombres: Silvia Juliana ");
         JLabel student2LastNameLabel = new JLabel("Apellidos: Rodriguez Rodriguez ");
         JLabel student2CodeLabel = new JLabel("Código: 202023822 ");
 
