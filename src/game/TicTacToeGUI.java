@@ -29,7 +29,7 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300, 300);
 
-        // Crear pestañas
+        // Crea las pestañas
         tabbedPane = new JTabbedPane();
 
         JPanel gamePanel = new JPanel(new GridLayout(4, 3));
@@ -153,7 +153,7 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
             computerSymbol = TicTacToe.PLAYER_SYMBOL;
         }
 
-        tabbedPane.setSelectedIndex(0); // Mostrar el tab del juego después de la selección del símbolo
+        tabbedPane.setSelectedIndex(0); // Muestra el tab del juego después de la selección del símbolo
         statusLabel.setText("Turno de " + playerName + " (" + playerSymbol + ")");
         
         Component[] infoComponents = ((JPanel) tabbedPane.getComponentAt(1)).getComponents();
@@ -168,7 +168,7 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         }
     }
     
-	private void showResultDialog(String result) {
+    private void showResultDialog(String result) {
         String message;
         Color backgroundColor;
 
@@ -186,12 +186,13 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         JPanel panel = new JPanel();
         panel.setBackground(backgroundColor);
 
-        JOptionPane.showOptionDialog(null, panel, message, JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[] {"Regresar"}, null);
+        int choice = JOptionPane.showOptionDialog(null, panel, message, JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[] {"Regresar"}, null);
 
-        // Redirigir al usuario a la pantalla principal
-        setVisible(false);
-        WelcomeWindow welcomeWindow = new WelcomeWindow();
-        welcomeWindow.setVisible(true);
+        if (choice == 0) {
+            setVisible(false);
+            WelcomeWindow welcomeWindow = new WelcomeWindow();
+            welcomeWindow.setVisible(true);
+        }
     }
     
 
@@ -200,7 +201,7 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         int row = -1;
         int col = -1;
 
-        // Encontrar la posición del botón clickeado
+        // Encuentra la posición del botón clickeado
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (buttons[i][j] == button) {
@@ -211,13 +212,13 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
             }
         }
 
-        // Realizar el movimiento del jugador
+        // Realiza el movimiento del jugador
         boolean validMove = game.makeMove(row, col, playerSymbol);
 
         if (validMove) {
             button.setText(String.valueOf(playerSymbol));
 
-            // Verificar si hay un ganador o un empate
+            // Verifica si hay un ganador o un empate
             if (game.hasWinningCombination(playerSymbol)) {
                 result = "Ganó";
                 statusLabel.setText("¡Ganaste!");
@@ -236,12 +237,30 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
                 game.switchPlayer();
                 statusLabel.setText("Turno de la computadora (" + computerSymbol + ")");
                 computerMove();
+               
+                if (game.hasWinningCombination(computerSymbol)) {
+                    result = "Perdió";
+                    statusLabel.setText("¡Perdiste!");
+                    disableButtons();
+                    saveGameResult();
+                    showResultDialog(result);
+                } else if (game.isBoardFull()) {
+                    result = "Empate";
+                    statusLabel.setText("¡Empate!");
+                    disableButtons();
+                    saveGameResult();
+                    showResultDialog(result);
+                } else {
+                    game.switchPlayer();
+                    statusLabel.setText("Turno de " + playerName + " (" + playerSymbol + ")");
+                }
+                
             }
         }
     }
 
     private void computerMove() {
-        // Verificar si la computadora puede ganar en el siguiente movimiento
+        // Verifica si la computadora puede ganar en el siguiente movimiento
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
                 if (game.isCellEmpty(row, col)) {
@@ -260,7 +279,7 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
             }
         }
 
-        // Verificar si el jugador puede ganar en el siguiente movimiento y bloquearlo
+        // Verifica si el jugador puede ganar en el siguiente movimiento y bloquearlo
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
                 if (game.isCellEmpty(row, col)) {
