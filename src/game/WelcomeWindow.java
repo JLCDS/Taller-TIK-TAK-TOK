@@ -27,7 +27,7 @@ public class WelcomeWindow extends JFrame {
                     TicTacToeGUI game = new TicTacToeGUI(playerName);
                     setVisible(false);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Por favor, ingresa un nombre válido.");
+                    JOptionPane.showMessageDialog(null, "Por favor, ingresa un nombre valido.");
                 }
             }
         });

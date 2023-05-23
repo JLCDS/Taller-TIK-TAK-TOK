@@ -11,14 +11,17 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
+
+
 public class TicTacToeGUI extends JFrame implements ActionListener {
-	private LocalDateTime endTime = null;
     private JButton[][] buttons;
     private JLabel statusLabel;
     private TicTacToe game;
     private String playerName;
     private String result;
-    
+    private LocalDateTime endTime = null;
+    private char playerSymbol;
+    private char computerSymbol;
 
     public TicTacToeGUI(String playerName) {
         super("Tic Tac Toe");
@@ -44,6 +47,7 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
 
         setVisible(true);
         displayInstructions();
+        chooseSymbol();
     }
 
     private void displayInstructions() {
@@ -54,7 +58,27 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
                 "0 | | \n" +
                 "1 | | \n" +
                 "2 | | \n" +
-                "Â¡Buena suerte!");
+                "¡Buena suerte!");
+    }
+
+    private void chooseSymbol() {
+        String[] options = { "X", "O" };
+        int choice = JOptionPane.showOptionDialog(null, "Elige tu símbolo:", "Selección de símbolo",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+
+        if (choice == 0) {
+            playerSymbol = 'X';
+            computerSymbol = 'O';
+        } else if (choice == 1) {
+            playerSymbol = 'O';
+            computerSymbol = 'X';
+        } else {
+            // Por defecto, utilizar X como símbolo del jugador
+            playerSymbol = 'X';
+            computerSymbol = 'O';
+        }
+
+        statusLabel.setText("Turno de " + playerName + " (" + playerSymbol + ")");
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -62,7 +86,7 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         int row = -1;
         int col = -1;
 
-        // Find the clicked button's position
+        // Encontrar la posición del botón clickeado
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (buttons[i][j] == button) {
@@ -73,43 +97,43 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
             }
         }
 
-        // Make the player's move
-        boolean validMove = game.makeMove(row, col, TicTacToe.PLAYER_SYMBOL);
+        // Realizar el movimiento del jugador
+        boolean validMove = game.makeMove(row, col, playerSymbol);
 
         if (validMove) {
-            button.setText(String.valueOf(TicTacToe.PLAYER_SYMBOL));
+            button.setText(String.valueOf(playerSymbol));
 
-            // Check for a winner or a draw
-            if (game.hasWinningCombination(TicTacToe.PLAYER_SYMBOL)) {
-                result = "GanÃ³";
-                statusLabel.setText("Â¡Ganaste!");
+            // Verificar si hay un ganador o un empate
+            if (game.hasWinningCombination(playerSymbol)) {
+                result = "Ganó";
+                statusLabel.setText("¡Ganaste!");
                 disableButtons();
                 saveGameResult();
                 showWelcomeWindow();
             } else if (game.isBoardFull()) {
                 result = "Empate";
-                statusLabel.setText("Â¡Empate!");
+                statusLabel.setText("¡Empate!");
                 disableButtons();
                 saveGameResult();
                 showWelcomeWindow();
             } else {
                 game.switchPlayer();
-                statusLabel.setText("Turno de la computadora (O)");
+                statusLabel.setText("Turno de la computadora (" + computerSymbol + ")");
                 computerMove();
             }
         }
     }
 
     private void computerMove() {
-        // Check if the computer can win on the next move
+        // Verificar si la computadora puede ganar en el siguiente movimiento
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
                 if (game.isCellEmpty(row, col)) {
-                    game.makeMove(row, col, TicTacToe.COMPUTER_SYMBOL);
-                    if (game.hasWinningCombination(TicTacToe.COMPUTER_SYMBOL)) {
-                        buttons[row][col].setText(String.valueOf(TicTacToe.COMPUTER_SYMBOL));
-                        result = "PerdiÃ³";
-                        statusLabel.setText("Â¡Perdiste!");
+                    game.makeMove(row, col, computerSymbol);
+                    if (game.hasWinningCombination(computerSymbol)) {
+                        buttons[row][col].setText(String.valueOf(computerSymbol));
+                        result = "Perdió";
+                        statusLabel.setText("¡Perdiste!");
                         disableButtons();
                         saveGameResult();
                         showWelcomeWindow();
@@ -120,15 +144,15 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
             }
         }
 
-        // Check if the player can win on the next move and block it
+        // Verificar si el jugador puede ganar en el siguiente movimiento y bloquearlo
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
                 if (game.isCellEmpty(row, col)) {
-                    game.makeMove(row, col, TicTacToe.PLAYER_SYMBOL);
-                    if (game.hasWinningCombination(TicTacToe.PLAYER_SYMBOL)) {
+                    game.makeMove(row, col, playerSymbol);
+                    if (game.hasWinningCombination(playerSymbol)) {
                         game.clearCell(row, col);
-                        game.makeMove(row, col, TicTacToe.COMPUTER_SYMBOL);
-                        buttons[row][col].setText(String.valueOf(TicTacToe.COMPUTER_SYMBOL));
+                        game.makeMove(row, col, computerSymbol);
+                        buttons[row][col].setText(String.valueOf(computerSymbol));
                         game.switchPlayer();
                         statusLabel.setText("Turno de " + playerName + " (" + game.getCurrentPlayerSymbol() + ")");
                         return;
@@ -138,14 +162,14 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
             }
         }
 
-        // If no winning move is possible, make a random move
+        // Si no es posible hacer un movimiento ganador, hacer un movimiento aleatorio
         Random random = new Random();
         while (true) {
             int row = random.nextInt(3);
             int col = random.nextInt(3);
             if (game.isCellEmpty(row, col)) {
-                game.makeMove(row, col, TicTacToe.COMPUTER_SYMBOL);
-                buttons[row][col].setText(String.valueOf(TicTacToe.COMPUTER_SYMBOL));
+                game.makeMove(row, col, computerSymbol);
+                buttons[row][col].setText(String.valueOf(computerSymbol));
                 game.switchPlayer();
                 statusLabel.setText("Turno de " + playerName + " (" + game.getCurrentPlayerSymbol() + ")");
                 return;
@@ -161,29 +185,17 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         }
     }
 
-   
-    	private void saveGameResult() {
-            String fileName = "history_game.txt";
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
-                endTime = LocalDateTime.now(); // Asignar valor a endTime
-                writer.write("Jugador: " + playerName + "; " + " Resultado: " + result + "; " + "Simbolo: " + TicTacToe.PLAYER_SYMBOL + "; " + "Tiempo de finalización: "
-                        + endTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                writer.newLine();
-                writer.flush();
-            } catch (IOException e) {
-                System.out.println("Error al guardar el resultado del juego.");
-            }
+    private void saveGameResult() {
+        String fileName = "history_game.txt";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
+            endTime = LocalDateTime.now(); // Asignar valor a endTime
+            writer.write("Jugador: " + playerName + "; " + "Resultado: " + result + "; " + "Símbolo: " + playerSymbol + "; " + "Tiempo de finalización: "
+                    + endTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+            writer.newLine();
+            writer.flush();
+        } catch (IOException e) {
+            System.out.println("Error al guardar el resultado del juego.");
         }
-
-    private void resetGame() {
-        game = new TicTacToe();
-        for (JButton[] row : buttons) {
-            for (JButton button : row) {
-                button.setText("");
-                button.setEnabled(true);
-            }
-        }
-        statusLabel.setText("Turno de " + playerName + " (X)");
     }
 
     private void showWelcomeWindow() {

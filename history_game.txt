@@ -1,2 +1,7 @@
 Jugador: silvia;  Resultado: PerdiÃ³; Simbolo: X; Tiempo de finalización: 2023-05-23T03:23:35.3625416
 Jugador: marco;  Resultado: GanÃ³; Simbolo: X; Tiempo de finalización: 2023-05-23T03:24:51.6214892
+Jugador: marco;  Resultado: GanÃ³; Simbolo: X; Tiempo de finalización: 2023-05-23T03:39:22.9596726
+Jugador: maria;  Resultado: Empate; Simbolo: X; Tiempo de finalización: 2023-05-23T04:02:43.5505314
+Jugador: matias; Resultado: Perdió; Símbolo: X; Tiempo de finalización: 2023-05-23T04:07:49.354828
+Jugador: alix;  Resultado: Empate; Simbolo: X; Tiempo de finalización: 2023-05-23T04:27:30.4023523
+Jugador: angie; Resultado: Empate; Símbolo: O; Tiempo de finalización: 2023-05-23T04:38:46.7115641
