@@ -11,10 +11,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
-
-
-
-
 public class TicTacToeGUI extends JFrame implements ActionListener {
     private JButton[][] buttons;
     private JLabel statusLabel;
@@ -25,7 +21,8 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
     private String result;
     private LocalDateTime endTime = null;
     private JTabbedPane tabbedPane;
-
+    private boolean symbolSelectionShown = false;
+    
     public TicTacToeGUI(String playerName) {
         super("Tic Tac Toe");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,8 +71,14 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
 
         setVisible(true);
         displayInstructions();
-        showSymbolSelectionDialog();
+        if (!symbolSelectionShown) {
+            showSymbolSelectionDialog();
+            symbolSelectionShown = true;
+        }
     }
+
+    
+
 
     private void displayInstructions() {
         JOptionPane.showMessageDialog(null, "Instrucciones:\n" +
@@ -103,7 +106,19 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
 
         tabbedPane.setSelectedIndex(0); // Mostrar el tab del juego después de la selección del símbolo
         statusLabel.setText("Turno de " + playerName + " (" + playerSymbol + ")");
+        
+        Component[] infoComponents = ((JPanel) tabbedPane.getComponentAt(1)).getComponents();
+        for (Component component : infoComponents) {
+            if (component instanceof JLabel) {
+                JLabel label = (JLabel) component;
+                if (label.getText().startsWith("Símbolo seleccionado:")) {
+                    label.setText("Símbolo seleccionado: " + playerSymbol);
+                    break;
+                }
+            }
+        }
     }
+    
 
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
@@ -208,6 +223,7 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
             }
         }
     }
+    
 
     private void saveGameResult() {
         String fileName = "history_game.txt";
@@ -229,7 +245,9 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
                 welcomeWindow.setVisible(true);
             }
         });
+        
     }
+    
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
