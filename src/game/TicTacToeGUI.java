@@ -23,6 +23,7 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
     private JTabbedPane tabbedPane;
     private boolean symbolSelectionShown = false;
     
+    
     public TicTacToeGUI(String playerName) {
         super("Tic Tac Toe");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,16 +35,23 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         JPanel gamePanel = new JPanel(new GridLayout(4, 3));
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-
+        
+        JPanel studentInfoPanel = createStudentInfoPanel();
+        
         tabbedPane.addTab("Juego", gamePanel);
         tabbedPane.addTab("Información", infoPanel);
-
+        tabbedPane.addTab("Integrantes", studentInfoPanel);
+        
         setLayout(new BorderLayout());
         add(tabbedPane, BorderLayout.CENTER);
+        
+        
 
         buttons = new JButton[3][3];
         game = new TicTacToe();
         this.playerName = playerName;
+        
+        
 
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
@@ -53,6 +61,7 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
                 gamePanel.add(buttons[row][col]);
             }
         }
+        
 
         statusLabel = new JLabel("Turno de " + playerName + " (X)");
         gamePanel.add(statusLabel);
@@ -77,7 +86,47 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         }
     }
 
-    
+
+    private JPanel createStudentInfoPanel() {
+        JPanel studentInfoPanel = new JPanel();
+        studentInfoPanel.setLayout(new BoxLayout(studentInfoPanel, BoxLayout.Y_AXIS));
+
+        JLabel student1Label = new JLabel("Integrante 1:");
+        JLabel student1NameLabel = new JLabel("Nombres: Juan");
+        JLabel student1LastNameLabel = new JLabel("Apellidos: ");
+        JLabel student1CodeLabel = new JLabel("Código: ");
+
+        JLabel student2Label = new JLabel("Integrante 2:");
+        JLabel student2NameLabel = new JLabel("Nombres: Silvia juliana ");
+        JLabel student2LastNameLabel = new JLabel("Apellidos: Rodriguez Rodriguez ");
+        JLabel student2CodeLabel = new JLabel("Código: 202023822 ");
+
+        JLabel universityLabel = new JLabel("Universidad: UPTC ");
+        JLabel facultyLabel = new JLabel("Facultad: Facultad de Ingeniería");
+        JLabel schoolLabel = new JLabel("Escuela: Escuela de Sistemas ");
+        JLabel subjectLabel = new JLabel("Materia: Programacion II ");
+        JLabel yearLabel = new JLabel("Año: 2023");
+        JLabel semesterLabel = new JLabel("Semestre: Primer semestre ");
+
+        studentInfoPanel.add(student1Label);
+        studentInfoPanel.add(student1NameLabel);
+        studentInfoPanel.add(student1LastNameLabel);
+        studentInfoPanel.add(student1CodeLabel);
+
+        studentInfoPanel.add(student2Label);
+        studentInfoPanel.add(student2NameLabel);
+        studentInfoPanel.add(student2LastNameLabel);
+        studentInfoPanel.add(student2CodeLabel);
+
+        studentInfoPanel.add(universityLabel);
+        studentInfoPanel.add(facultyLabel);
+        studentInfoPanel.add(schoolLabel);
+        studentInfoPanel.add(subjectLabel);
+        studentInfoPanel.add(yearLabel);
+        studentInfoPanel.add(semesterLabel);
+
+        return studentInfoPanel;
+    }
 
 
     private void displayInstructions() {
