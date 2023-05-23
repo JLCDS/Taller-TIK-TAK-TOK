@@ -237,9 +237,12 @@ public class Game {
     private void saveGameResult() {
     	String fileName = "src/resources/history_game.txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
-            writer.write("Jugador: " + playerName + ", Resultado: " + result + ", Tiempo de finalización: "
+            writer.write("Jugador: " + playerName + "; " + " Resultado: " + result + "; " + "Simbolo: " + PLAYER_SYMBOL+ "; "+" Tiempo de finalización: "
                     + endTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
             writer.newLine();
+           
+            
+            writer.flush();
         } catch (IOException e) {
             System.out.println("Error al guardar el resultado del juego.");
         }
