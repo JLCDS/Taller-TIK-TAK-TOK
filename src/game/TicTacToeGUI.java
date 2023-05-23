@@ -13,21 +13,36 @@ import java.util.Random;
 
 
 
+
+
 public class TicTacToeGUI extends JFrame implements ActionListener {
     private JButton[][] buttons;
     private JLabel statusLabel;
     private TicTacToe game;
     private String playerName;
-    private String result;
-    private LocalDateTime endTime = null;
     private char playerSymbol;
     private char computerSymbol;
+    private String result;
+    private LocalDateTime endTime = null;
+    private JTabbedPane tabbedPane;
 
     public TicTacToeGUI(String playerName) {
         super("Tic Tac Toe");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300, 300);
-        setLayout(new GridLayout(4, 3));
+
+        // Crear pestañas
+        tabbedPane = new JTabbedPane();
+
+        JPanel gamePanel = new JPanel(new GridLayout(4, 3));
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+
+        tabbedPane.addTab("Juego", gamePanel);
+        tabbedPane.addTab("Información", infoPanel);
+
+        setLayout(new BorderLayout());
+        add(tabbedPane, BorderLayout.CENTER);
 
         buttons = new JButton[3][3];
         game = new TicTacToe();
@@ -38,16 +53,28 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
                 buttons[row][col] = new JButton("");
                 buttons[row][col].setFont(new Font("Arial", Font.BOLD, 50));
                 buttons[row][col].addActionListener(this);
-                add(buttons[row][col]);
+                gamePanel.add(buttons[row][col]);
             }
         }
 
         statusLabel = new JLabel("Turno de " + playerName + " (X)");
-        add(statusLabel);
+        gamePanel.add(statusLabel);
+
+        JLabel infoLabel = new JLabel("Información del jugador:");
+        infoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        infoPanel.add(infoLabel);
+
+        JLabel playerNameLabel = new JLabel("Nickname: " + playerName);
+        playerNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        infoPanel.add(playerNameLabel);
+
+        JLabel playerSymbolLabel = new JLabel("Símbolo seleccionado: " + playerSymbol);
+        playerSymbolLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        infoPanel.add(playerSymbolLabel);
 
         setVisible(true);
         displayInstructions();
-        chooseSymbol();
+        showSymbolSelectionDialog();
     }
 
     private void displayInstructions() {
@@ -61,23 +88,20 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
                 "¡Buena suerte!");
     }
 
-    private void chooseSymbol() {
-        String[] options = { "X", "O" };
-        int choice = JOptionPane.showOptionDialog(null, "Elige tu símbolo:", "Selección de símbolo",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+    private void showSymbolSelectionDialog() {
+        Object[] options = {"X", "O"};
+        int choice = JOptionPane.showOptionDialog(null, "Selecciona tu símbolo:", "Selección de símbolo",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
         if (choice == 0) {
-            playerSymbol = 'X';
-            computerSymbol = 'O';
+            playerSymbol = TicTacToe.PLAYER_SYMBOL;
+            computerSymbol = TicTacToe.COMPUTER_SYMBOL;
         } else if (choice == 1) {
-            playerSymbol = 'O';
-            computerSymbol = 'X';
-        } else {
-            // Por defecto, utilizar X como símbolo del jugador
-            playerSymbol = 'X';
-            computerSymbol = 'O';
+            playerSymbol = TicTacToe.COMPUTER_SYMBOL;
+            computerSymbol = TicTacToe.PLAYER_SYMBOL;
         }
 
+        tabbedPane.setSelectedIndex(0); // Mostrar el tab del juego después de la selección del símbolo
         statusLabel.setText("Turno de " + playerName + " (" + playerSymbol + ")");
     }
 
@@ -154,7 +178,7 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
                         game.makeMove(row, col, computerSymbol);
                         buttons[row][col].setText(String.valueOf(computerSymbol));
                         game.switchPlayer();
-                        statusLabel.setText("Turno de " + playerName + " (" + game.getCurrentPlayerSymbol() + ")");
+                        statusLabel.setText("Turno de " + playerName + " (" + playerSymbol + ")");
                         return;
                     }
                     game.clearCell(row, col);
@@ -162,7 +186,7 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
             }
         }
 
-        // Si no es posible hacer un movimiento ganador, hacer un movimiento aleatorio
+        // Si no es posible realizar un movimiento ganador, realizar un movimiento aleatorio
         Random random = new Random();
         while (true) {
             int row = random.nextInt(3);
@@ -171,7 +195,7 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
                 game.makeMove(row, col, computerSymbol);
                 buttons[row][col].setText(String.valueOf(computerSymbol));
                 game.switchPlayer();
-                statusLabel.setText("Turno de " + playerName + " (" + game.getCurrentPlayerSymbol() + ")");
+                statusLabel.setText("Turno de " + playerName + " (" + playerSymbol + ")");
                 return;
             }
         }
@@ -189,7 +213,7 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         String fileName = "history_game.txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
             endTime = LocalDateTime.now(); // Asignar valor a endTime
-            writer.write("Jugador: " + playerName + "; " + "Resultado: " + result + "; " + "Símbolo: " + playerSymbol + "; " + "Tiempo de finalización: "
+            writer.write("Jugador: " + playerName + "; " + " Resultado: " + result + "; " + "Simbolo: " + playerSymbol + "; " + "Tiempo de finalización: "
                     + endTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
             writer.newLine();
             writer.flush();

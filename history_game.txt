@@ -5,3 +5,4 @@ Jugador: maria;  Resultado: Empate; Simbolo: X; Tiempo de finalización: 2023-05-
 Jugador: matias; Resultado: Perdió; Símbolo: X; Tiempo de finalización: 2023-05-23T04:07:49.354828
 Jugador: alix;  Resultado: Empate; Simbolo: X; Tiempo de finalización: 2023-05-23T04:27:30.4023523
 Jugador: angie; Resultado: Empate; Símbolo: O; Tiempo de finalización: 2023-05-23T04:38:46.7115641
+Jugador: laura;  Resultado: Empate; Simbolo: O; Tiempo de finalización: 2023-05-23T04:48:32.5683429
