@@ -12,12 +12,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 public class TicTacToeGUI extends JFrame implements ActionListener {
+	private LocalDateTime endTime = null;
     private JButton[][] buttons;
     private JLabel statusLabel;
     private TicTacToe game;
     private String playerName;
     private String result;
-    private LocalDateTime endTime;
+    
 
     public TicTacToeGUI(String playerName) {
         super("Tic Tac Toe");
@@ -160,17 +161,19 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         }
     }
 
-    private void saveGameResult() {
-        String fileName = "history_game.txt";
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
-            writer.write("Jugador: " + playerName + "; " + " Resultado: " + result + "; " + "Simbolo: " + TicTacToe.PLAYER_SYMBOL + "; " + "Tiempo de finalizaciÃ³n: "
-                    + endTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-            writer.newLine();
-            writer.flush();
-        } catch (IOException e) {
-            System.out.println("Error al guardar el resultado del juego.");
+   
+    	private void saveGameResult() {
+            String fileName = "history_game.txt";
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
+                endTime = LocalDateTime.now(); // Asignar valor a endTime
+                writer.write("Jugador: " + playerName + "; " + " Resultado: " + result + "; " + "Simbolo: " + TicTacToe.PLAYER_SYMBOL + "; " + "Tiempo de finalización: "
+                        + endTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                writer.newLine();
+                writer.flush();
+            } catch (IOException e) {
+                System.out.println("Error al guardar el resultado del juego.");
+            }
         }
-    }
 
     private void resetGame() {
         game = new TicTacToe();
