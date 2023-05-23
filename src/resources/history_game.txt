@@ -49,3 +49,9 @@ martha;Gano;X;2023-05-22 21:36:46
 silvia;Gano;X;2023-05-22 21:38:02
 Jugador: silvia, Resultado: Gano, Tiempo de finalización: 2023-05-22T21:44:50.1891859
 Jugador: silvia, Resultado: Empate, Tiempo de finalización: 2023-05-22T21:48:48.4317836
+Jugador: marcos, Resultado: Perdio, Tiempo de finalización: 2023-05-22T22:17:35.1223292
+Jugador: silvia, Resultado: Perdio;X;, Tiempo de finalización: 2023-05-22T22:24:13.9103815
+Jugador: sebas, Resultado: Gano;X;, Tiempo de finalización: 2023-05-22T22:24:37.9963922
+Jugador: maria, Resultado: Perdio;X;, Tiempo de finalización: 2023-05-22T22:25:06.8490657
+Jugador: matias; Resultado: Empate;Simbolo:X; Tiempo de finalización: 2023-05-22T22:28:01.4705897
+Jugador: angie;  Resultado: Empate; Simbolo: X;  Tiempo de finalización: 2023-05-22T22:32:23.8673281
