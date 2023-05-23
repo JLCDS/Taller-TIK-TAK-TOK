@@ -119,6 +119,32 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
         }
     }
     
+	private void showResultDialog(String result) {
+        String message;
+        Color backgroundColor;
+
+        if (result.equals("Ganó")) {
+            message = "¡Ganaste!";
+            backgroundColor = Color.GREEN;
+        } else if (result.equals("Perdió")) {
+            message = "¡Perdiste!";
+            backgroundColor = Color.RED;
+        } else {
+            message = "¡Empate!";
+            backgroundColor = Color.GRAY;
+        }
+
+        JPanel panel = new JPanel();
+        panel.setBackground(backgroundColor);
+
+        JOptionPane.showOptionDialog(null, panel, message, JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[] {"Regresar"}, null);
+
+        // Redirigir al usuario a la pantalla principal
+        setVisible(false);
+        WelcomeWindow welcomeWindow = new WelcomeWindow();
+        welcomeWindow.setVisible(true);
+    }
+    
 
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
@@ -149,12 +175,14 @@ public class TicTacToeGUI extends JFrame implements ActionListener {
                 disableButtons();
                 saveGameResult();
                 showWelcomeWindow();
+                showResultDialog(result);
             } else if (game.isBoardFull()) {
                 result = "Empate";
                 statusLabel.setText("¡Empate!");
                 disableButtons();
                 saveGameResult();
                 showWelcomeWindow();
+                showResultDialog(result);
             } else {
                 game.switchPlayer();
                 statusLabel.setText("Turno de la computadora (" + computerSymbol + ")");

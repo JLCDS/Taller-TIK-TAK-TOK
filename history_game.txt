@@ -12,3 +12,6 @@ Jugador: carlos;  Resultado: Perdió; Simbolo: O; Tiempo de finalización: 2023-05
 Jugador: camilo;  Resultado: Empate; Simbolo: O; Tiempo de finalización: 2023-05-23T05:08:08.4681419
 Jugador: max;  Resultado: Empate; Simbolo: O; Tiempo de finalización: 2023-05-23T05:29:41.0416076
 Jugador: maxi;  Resultado: Perdió; Simbolo: O; Tiempo de finalización: 2023-05-23T05:35:40.1914247
+Jugador: mateo;  Resultado: Perdió; Simbolo: O; Tiempo de finalización: 2023-05-23T05:49:23.1031879
+Jugador: alex;  Resultado: Perdió; Simbolo: O; Tiempo de finalización: 2023-05-23T05:50:06.3351715
+Jugador: marco;  Resultado: Empate; Simbolo: O; Tiempo de finalización: 2023-05-23T05:52:04.920008
